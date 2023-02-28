@@ -11,5 +11,9 @@
     "editor.insertSpaces": false,
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "golang.go"
-  }
+  },
+  "cSpell.words": [
+    "fibo",
+    "fibofor"
+  ]
 }
