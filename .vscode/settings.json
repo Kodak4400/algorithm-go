@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": false,
+  "editor.lineNumbers": "on",
+  "editor.rulers": [
+    80
+  ],
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "[go]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": false,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
+  }
+}
