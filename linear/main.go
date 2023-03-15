@@ -4,10 +4,7 @@ import (
 	"fmt"
 )
 
-var memo = [7]int{-1, -1, -1, -1, -1, -1, -1}
-
 func main() {
-
 	// 線形探索
 	INF := 20000000
 	v := 4
@@ -70,82 +67,40 @@ func main() {
 		}
 	}
 
+	// [5] 部分和を再帰関数を用いる全探索
+	// N = 4
+	// a=(3, 2, 6, 5)
+	// W = 14
+	a := [4]int{3, 2, 6, 5}
+	r := p(4, 14, a)
+	fmt.Println("14になった？ =>", r)
+
 	fmt.Println("線形探索(存在有無) =>", exist)
 	fmt.Println("線形探索(添字取得) =>", found_id)
 	fmt.Println("線形探索(最小値取得) =>", min_value)
 	fmt.Println("線形探索(ペア和の最小値取得) =>", pair_min_value)
 	fmt.Printf("線形探索(部分和問題に対するビットを用いる全探索解法) => sum_exist: %t, w: %d sum_slice: %d \n", sum_exist, w, sum_slice)
-
-	// 再帰と分割統治法
-	p(5)
-
-	// ユークリッドの互除法で最大公約数を求める
-	fmt.Println("gcd(51, 15) =>", gcd(51, 15))
-	fmt.Println("gcd(15, 51) =>", gcd(15, 51))
-
-	// フィボナッチ数列を求める
-	fmt.Println("fibo(6) =>", fibo(6))
-
-	// フィボナッチ数列を求める(for版)
-	fibofor := [7]int{0, 1}
-	for n := 2; n < 7; n++ {
-		fibofor[n] = fibofor[n-1] + fibofor[n-2]
-		fmt.Printf("%d 項目 = %d\n", n, fibofor[n])
-	}
-
-	// フィボナッチ数列を求める(メモ化)
-	fmt.Println("mfibo(6) =>", mfibo(6))
 }
 
-// ------------------------
-
-func p(n int) int {
-	fmt.Printf("func p(%d) を呼びました\n", n)
-
-	if n == 0 {
-		return 0
+func p(i int, w int, a [4]int) bool {
+	if i == 0 {
+		if w == 0 {
+			fmt.Printf("i=>%d, w=>%d, a=>%v\n", i, w, a)
+			return true
+		} else {
+			return false
+		}
 	}
 
-	result := n + p(n-1)
-	fmt.Printf("%d までの和 = %d\n", n, result)
-	return result
-}
-
-func gcd(m int, n int) int {
-	if n == 0 {
-		return m
+	if p(i-1, w, a) {
+		fmt.Printf("i=>%d, w=>%d, a=>%v\n", i, w, a)
+		return true
 	}
 
-	return gcd(n, m%n)
-}
-
-func fibo(n int) int {
-	fmt.Printf("func fibo(%d) を呼びました\n", n)
-	if n == 0 {
-		return 0
-	} else if n == 1 {
-		return 1
+	if p(i-1, w-a[i-1], a) {
+		fmt.Printf("i=>%d, w=>%d, a=>%v\n", i, w, a)
+		return true
 	}
 
-	result := fibo(n-1) + fibo(n-2)
-	fmt.Printf("%d 項目 = %d\n", n, result)
-
-	return result
-}
-
-func mfibo(n int) int {
-	fmt.Printf("func mfibo(%d) を呼びました\n", n)
-	if n == 0 {
-		return 0
-	} else if n == 1 {
-		return 1
-	}
-
-	if memo[n] != -1 {
-		return memo[n]
-	}
-
-	memo[n] = mfibo(n-1) + mfibo(n-2)
-
-	return memo[n]
+	return false
 }
