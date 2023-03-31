@@ -57,6 +57,26 @@ func (m *Node) printList() {
 }
 
 func main() {
+	m := map[string]string{
+		"go": "golang",
+		"rb": "ruby",
+		"js": "javascript",
+	}
+	fmt.Println("map", m)
+
+	languages := make(map[string]string)
+	languages["go"] = "golang"
+	languages["rb"] = "ruby"
+	languages["js"] = "javascript"
+
+	fmt.Println("languages", languages)
+
+	for key, value := range languages { // Hashテーブルに格納されているので、要素をランダムに取得
+		fmt.Println(key, value)
+	}
+
+	// 複数の異なるキーが同じバケットに入ることを衝突（collision）と呼ぶ
+
 	// 連結リスト（単方向）
 	names := [6]string{
 		"yamamoto",
