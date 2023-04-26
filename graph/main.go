@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// var color = []int{-1, -1, -1, -1, -1}
+
 func main() {
 	//...
 	// グラフの表現（有効グラフ）
@@ -41,6 +43,62 @@ func main() {
 		{1, 3, 4, 5},
 	}
 	hsearch(h, 0)
+
+	// 2部グラフ
+	// 白色の頂点同士が隣接することなく、黒色の頂点同士が隣接することもない。
+	// という条件を満たす各頂点を白色または黒色に塗り分けることが可能なグラフのこと
+	// 与えられたグラフが2部グラフかどうかを判定する。
+	// 以下を繰り返し、この過程で「両端点が同色であるような辺」が検出されれば2部グラフではないことが確定する。
+	// - 白色頂点に隣接した頂点は黒色
+	// - 黒色頂点に隣接した頂点は白色
+	j := [][]int{
+		{1, 3},
+		{0, 2, 4},
+		{0, 4},
+		{1, 3},
+	}
+
+	color := make([]int, len(j)+1)
+	for i, _ := range color {
+		color[i] = -1
+	}
+
+	is_bipartite := true
+	for v := 0; v < len(j); v++ {
+		if color[v] != -1 {
+			continue
+		}
+		if !dfs2(color, j, v, 0) {
+			is_bipartite = false
+		}
+	}
+
+	fmt.Println(is_bipartite)
+}
+
+func dfs2(color []int, g [][]int, v int, cur int) bool {
+	color[v] = cur
+	fmt.Println("color, cur, v ->", color, cur, v)
+
+	for _, next_v := range g[v] {
+		fmt.Println(next_v)
+
+		// 隣接頂点がすでに色が確定していた場合
+		if color[next_v] != -1 {
+			// 同じ色が隣接した場合は2部グラフではない。
+			if color[next_v] == cur {
+				return false
+			}
+			// 色が確定した場合には探索しない。
+			continue
+		}
+
+		// 未確定の場合
+		if !dfs2(color, g, next_v, 1-cur) {
+			return false
+		}
+	}
+	return true
 }
 
 func bfs(g [][]int, s int) {
