@@ -54,11 +54,12 @@ func main() {
 	j := [][]int{
 		{1, 3},
 		{0, 2, 4},
+		{1},
 		{0, 4},
 		{1, 3},
 	}
 
-	color := make([]int, len(j)+1)
+	color := make([]int, len(j))
 	for i, _ := range color {
 		color[i] = -1
 	}
@@ -73,16 +74,53 @@ func main() {
 		}
 	}
 
-	fmt.Println(is_bipartite)
+	fmt.Println("is_bipartite, color =>", is_bipartite, color)
+
+	// トポロジカルソート
+	// 与えられた有効グラフに対して、各頂点の向きに沿うように順序付けて並び替えること
+	// つまり、タスク間に依存関係がある場合、どんな順番でタスクをこなせば良いかを決めるのに役立つアルゴリズム
+	// トポロジカルソートができるグラフは決まりがあって、「ある頂点から出発して、その頂点に戻ってくるような路がない有向グラフ（有向非巡回グラフ（directed acyclic graph, DAG））であること」
+	t := [][]int{
+		{5},
+		{3, 6},
+		{5, 7},
+		{0, 7},
+		{1, 2, 6},
+		{},
+		{7},
+		{0},
+	}
+
+	seen := make([]bool, len(t))
+	order := make([]int, 0, len(t))
+
+	for v := 0; v < len(t); v++ {
+		if seen[v] {
+			continue
+		}
+		rec(t, v, seen)
+	}
+	fmt.Println("order =>", order)
+}
+
+func rec(g [][]int, v int, seen []bool) {
+	seen[v] = true
+	for _, next_v := range g[v] {
+		if seen[next_v] {
+			continue
+		}
+		rec(g, next_v, seen)
+	}
+
+	// v-outを記録
+	fmt.Println("v-out", v)
 }
 
 func dfs2(color []int, g [][]int, v int, cur int) bool {
 	color[v] = cur
-	fmt.Println("color, cur, v ->", color, cur, v)
 
 	for _, next_v := range g[v] {
-		fmt.Println(next_v)
-
+		fmt.Println("color, cur, v ->", color, cur, v)
 		// 隣接頂点がすでに色が確定していた場合
 		if color[next_v] != -1 {
 			// 同じ色が隣接した場合は2部グラフではない。
