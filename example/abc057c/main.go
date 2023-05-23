@@ -5,19 +5,20 @@ import (
 	"strconv"
 )
 
-// func F(a, b int) int {
-// 	if a < b {
-// 		return a
-// 	}
-// 	return b
-// }
+func F(A, B string) int {
+	a := len(A)
+	b := len(B)
+	if a < b {
+		return b
+	}
+	return a
+}
 
 func main() {
 	// 10000
 	// F(10000, 0) => 5
 	// F(1000, 10) => 4
 	// F(100, 100) => 3
-
 	var N int
 	_, n_err := fmt.Scan(&N)
 	if n_err != nil {
@@ -25,22 +26,19 @@ func main() {
 		return
 	}
 
-	n := len(strconv.Itoa(N))
+	ans := len(strconv.Itoa(N)) // 最大の桁数
 
-	// 全探索
-	// ans := math.MaxInt64
-	for i := 0; i < n; i++ {
-		A := N
-		B := i
+	for i := 1; i*i <= N; i++ {
+		if N%i != 0 {
+			continue
+		}
+		j := N / i
+		cur := F(strconv.Itoa(i), strconv.Itoa(j))
 
-		a := len(strconv.Itoa(A))
-		b := len(strconv.Itoa(B))
-
-		if a*b == N {
-			fmt.Println(a, b)
+		if ans > cur {
+			ans = cur
 		}
 
-		// ans = F(len(strconv.Itoa(A)), len(strconv.Itoa(B)))
-		N /= 10
 	}
+	fmt.Println(ans)
 }
