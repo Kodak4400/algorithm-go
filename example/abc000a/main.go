@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -24,28 +25,42 @@ func main() {
 	sc = bufio.NewScanner(os.Stdin)
 	sc.Split(bufio.ScanWords)
 
-	N := scanInt()
+	N, M := scanInt(), scanInt()
 
-	A := make([]string, N)
+	A := make([]int, N)
 	for i := 0; i < N; i++ {
-		A[i] = scanString()
+		A[i] = scanInt()
 	}
 
-	var r string
-	for i, a := range A {
-		if i == 0 {
-			r = a[N-1:]
-			A[i] = A[i+1][:1] + a[:N-1]
-		} else if i == N-1 {
-			A[i] = a[1:] + r
-		} else {
-			t := a[N-1:]
-			A[i] = A[i+1][:1] + a[1:N-1] + r
-			r = t
+	B := make([]int, M)
+	for i := 0; i < M; i++ {
+		B[i] = scanInt()
+	}
+
+	sort.Ints(A)
+	sort.Ints(B)
+
+	start := 0
+	end := int(1e9) + 1
+	for {
+		// fmt.Println(start, end)
+
+		v := (start + end) / 2
+		sell := sort.Search(N, func(i int) bool { return A[i] > v })
+		buy := M - sort.Search(M, func(i int) bool { return B[i] >= v })
+
+		// fmt.Println("v, sell, buy ->", v, sell, buy)
+
+		if start == end {
+			// fmt.Println(sell, buy)
+			break
+		}
+
+		if sell < buy {
+			start = v + 1
+		} else if buy <= sell {
+			end = v
 		}
 	}
-
-	for _, a := range A {
-		fmt.Println(a)
-	}
+	fmt.Println(start)
 }
