@@ -1,0 +1,6 @@
+go 1.21.0
+
+use (
+	./at_coder/abc000a
+	./ironclad_rule
+)
