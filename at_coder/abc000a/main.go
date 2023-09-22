@@ -22,6 +22,13 @@ func min(min int, i int) int {
 	return min
 }
 
+func max(max int, i int) int {
+	if max < i {
+		max = i
+	}
+	return max
+}
+
 func tMax(t0 int, t1 int, t2 int) int {
 	max := -1
 	if t0 < t1 {
@@ -59,25 +66,35 @@ func main() {
 
 	INF := 1001001001
 	ans := INF
-	for t0 := 0; t0 < 300; t0++ {
-		for t1 := 0; t1 < 300; t1++ {
-			for t2 := 0; t2 < 300; t2++ {
-				if t0 == t1 {
+	for i0 := 0; i0 < m; i0++ {
+		for i1 := 0; i1 < m; i1++ {
+			for i2 := 0; i2 < m; i2++ {
+				if a1[i0] != a2[i1] {
 					continue
 				}
-				if t0 == t2 {
+				if a1[i0] != a3[i2] {
 					continue
 				}
-				if t1 == t2 {
-					continue
+				now := 0
+				now = i0
+				{
+					t := i1
+					if i0 == i1 {
+						t += m
+					}
+					now = max(now, t)
 				}
-				if a1[t0%m] != a2[t1%m] {
-					continue
+				{
+					t := i2
+					if i0 == i2 {
+						t += m
+					}
+					if i1 == i2 {
+						t += m
+					}
+					now = max(now, t)
 				}
-				if a1[t0%m] != a3[t2%m] {
-					continue
-				}
-				ans = min(ans, tMax(t0, t1, t2))
+				ans = min(ans, now)
 			}
 		}
 	}
