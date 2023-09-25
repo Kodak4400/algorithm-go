@@ -57,6 +57,7 @@ func main() {
 
 	ans := -1
 	for i := 0; i <= 100; i++ {
+		// ソートはコピーした配列に対して行うこと
 		copy(b, a)
 		b[n-1] = i
 		sort.Ints(b)
